@@ -1,7 +1,7 @@
 package com.qienys.JnuPrac.service;
 
 import com.qienys.JnuPrac.pojo.Product;
-import com.sun.tools.javac.util.List;
+import java.util.List;
 
 public interface ProductService {
     Product findByName(String name);
