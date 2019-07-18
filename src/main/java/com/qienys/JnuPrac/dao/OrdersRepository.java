@@ -1,11 +1,13 @@
 package com.qienys.JnuPrac.dao;
 
 import com.qienys.JnuPrac.pojo.Orders;
-import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
 
 public interface OrdersRepository extends CrudRepository<Orders,Long> {
 
-    List<Orders> findByUid(Long uid);
+    Orders findByUid(Long uid);
+    List<Orders> findAllByUid(Long uid);
 
 }
