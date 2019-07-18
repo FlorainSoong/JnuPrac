@@ -1,8 +1,11 @@
 package com.qienys.JnuPrac.Controller;
 
+
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qienys.JnuPrac.pojo.OrderProducts;
+import com.qienys.JnuPrac.pojo.Orders;
 import com.qienys.JnuPrac.service.impl.OrderProductsServiceImpl;
 import com.qienys.JnuPrac.service.impl.OrdersServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +21,23 @@ import static java.lang.System.out;
 public class OrderProductsController {
     @Autowired
     private OrderProductsServiceImpl orderProductsServiceImpl;
+    //根据订单ID返回商品
+    @Autowired
+    private OrdersServiceImpl ordersServiceImpl;
 
-    @RequestMapping(value = "/orderproducts", method = RequestMethod.GET, produces = "application/json;UTF=8")
+    @RequestMapping(value = "/orderProductsList", method = RequestMethod.GET, produces = "application/json;UTF=8")
     @ResponseBody
     public String getOrderProductsList(@RequestBody JSONObject jsonOrderProducts){
+        Orders order= JSON.parseObject(jsonOrderProducts.toJSONString(),Orders.class);
+        Orders orders = ordersServiceImpl.findByUid(order.getUid());
+        JSONArray jsonArray = new JSONArray();
         out.println(jsonOrderProducts.toJSONString());
-        JSONObject result = new JSONObject();
-        OrderProducts orderProducts = JSON.parseObject(jsonOrderProducts.toJSONString(),OrderProducts.class);
-        List<OrderProducts> orderProductsList = orderProductsServiceImpl.findByOrderId(orderProducts.getOrderId());
-        result.put("method", "json");
-        result.put("data",orderProductsList);
+        JSONObject jsonObject = new JSONObject();
+        List<OrderProducts> orderProductsList = orderProductsServiceImpl.findByOrderId(orders.getUid());
+        jsonObject.put("method", "json");
+        jsonArray.add(jsonObject);
+        jsonArray.add((orderProductsList));
 
-        return result.toJSONString();
+        return jsonArray.toJSONString();
     }
 }
