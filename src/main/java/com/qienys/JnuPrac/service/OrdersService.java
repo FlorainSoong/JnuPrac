@@ -6,5 +6,8 @@ import java.util.List;
 
 
 public interface OrdersService {
-    List<Orders> findByUid(Long uid);
+    Orders findByUid(Long uid);
+    List<Orders> findAllByUid(Long uid);
 }
+
+
